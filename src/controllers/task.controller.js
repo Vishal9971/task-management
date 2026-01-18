@@ -39,9 +39,10 @@ exports.getTasks = async (req, res) => {
 exports.updateTask = async (req, res) => {
   try {
     const task = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    socket.getIO().to(task.assignedTo?.toString()).emit('taskUpdated', req.task);
+    socket.getIO().to(task?.assignedTo?.toString()).emit('taskUpdated', req.task);
     return res.json({ message: 'Task update successfully', error: false , task:task});
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: error.message,
       error: true,
@@ -51,9 +52,10 @@ exports.updateTask = async (req, res) => {
 exports.deleteTask = async (req, res) => {
   try {
     await req.task.deleteOne();
-    socket.getIO().to(task.assignedTo?.toString()).emit('taskDeleted', { taskId: req.task._id });
+    socket.getIO().to(req.task?.assignedTo?.toString()).emit('taskDeleted', { taskId: req.task._id });
     return res.status(200).json({ message: 'Task deleted successfully', error:false });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       message: error.message,
       error: true,
