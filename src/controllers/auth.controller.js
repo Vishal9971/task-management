@@ -20,12 +20,11 @@ exports.register = async(req,res)=>{
 
 exports.login= async(req,res)=>{
   try{
-
     const user = await User.findOne({email:req.body.email});
     if(!user || !(await user.comparePassword(req.body.password))){
       return res.status(401).json({message:'Invalid Credentials'});
     }
-    res.json({
+    return res.status(200).json({
       error:false,
       token:generateToken(user)});
   }catch(error){
@@ -39,7 +38,7 @@ exports.login= async(req,res)=>{
 
 exports.logout = async(req,res)=>{
   try {
-    res.json({ message: 'Logged out successfully' });
+    return res.json({ message: 'Logged out successfully' });
   } catch (error) {
     console.log(error);
     return res.status(500).jsn({

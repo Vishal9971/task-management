@@ -7,3 +7,6 @@ const userController = require('../controllers/user.controller');
 router.get('/profile', auth,userController.getUserProfile);
 
 module.exports = router;
+
+
+
